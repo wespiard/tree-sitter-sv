@@ -1,0 +1,20 @@
+======================
+Timeunits Declaration
+======================
+
+timeunit 100ps; timeprecision 1ps;
+
+---
+
+(source_text
+  (timeunits_declaration
+    (time_literal
+      (unsigned_number
+        (decimal_digit)
+        (decimal_digit)
+        (decimal_digit))
+      (time_unit))
+    (time_literal
+      (unsigned_number
+        (decimal_digit))
+      (time_unit))))

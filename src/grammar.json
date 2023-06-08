@@ -1,9 +1,241 @@
 {
   "name": "sv",
   "rules": {
-    "source_file": {
-      "type": "STRING",
-      "value": "hello"
+    "source_text": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "timeunits_declaration"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "timeunits_declaration": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "timeunit"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "time_literal"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "/"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "time_literal"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "timeprecision"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "time_literal"
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "timeunit"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "time_literal"
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            },
+            {
+              "type": "STRING",
+              "value": "timeprecision"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "time_literal"
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "timeprecision"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "time_literal"
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            },
+            {
+              "type": "STRING",
+              "value": "timeunit"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "time_literal"
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
+        }
+      ]
+    },
+    "time_literal": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "unsigned_number"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "time_unit"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "fixed_point_number"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "time_unit"
+            }
+          ]
+        }
+      ]
+    },
+    "time_unit": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "s"
+        },
+        {
+          "type": "STRING",
+          "value": "ms"
+        },
+        {
+          "type": "STRING",
+          "value": "us"
+        },
+        {
+          "type": "STRING",
+          "value": "ns"
+        },
+        {
+          "type": "STRING",
+          "value": "ps"
+        },
+        {
+          "type": "STRING",
+          "value": "fs"
+        }
+      ]
+    },
+    "fixed_point_number": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "unsigned_number"
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unsigned_number"
+        }
+      ]
+    },
+    "unsigned_number": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "decimal_digit"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "_"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "decimal_digit"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "decimal_digit": {
+      "type": "PATTERN",
+      "value": "[0-9]"
     }
   },
   "extras": [

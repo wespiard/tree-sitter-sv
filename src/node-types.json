@@ -1,11 +1,142 @@
 [
   {
-    "type": "source_file",
+    "type": "fixed_point_number",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "unsigned_number",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_text",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "timeunits_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "time_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "fixed_point_number",
+          "named": true
+        },
+        {
+          "type": "time_unit",
+          "named": true
+        },
+        {
+          "type": "unsigned_number",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "time_unit",
     "named": true,
     "fields": {}
   },
   {
-    "type": "hello",
+    "type": "timeunits_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "time_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "unsigned_number",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "decimal_digit",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": ".",
+    "named": false
+  },
+  {
+    "type": "/",
+    "named": false
+  },
+  {
+    "type": ";",
+    "named": false
+  },
+  {
+    "type": "_",
+    "named": false
+  },
+  {
+    "type": "decimal_digit",
+    "named": true
+  },
+  {
+    "type": "fs",
+    "named": false
+  },
+  {
+    "type": "ms",
+    "named": false
+  },
+  {
+    "type": "ns",
+    "named": false
+  },
+  {
+    "type": "ps",
+    "named": false
+  },
+  {
+    "type": "s",
+    "named": false
+  },
+  {
+    "type": "timeprecision",
+    "named": false
+  },
+  {
+    "type": "timeunit",
+    "named": false
+  },
+  {
+    "type": "us",
     "named": false
   }
 ]
