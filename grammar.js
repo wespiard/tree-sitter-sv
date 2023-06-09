@@ -163,6 +163,20 @@ module.exports = grammar({
         seq('.', $.port_identifier, '(', optional($.port_expression))
       ),
 
+    port_reference: ($) => seq($.port_identifier, $.constant_select),
+
+    port_direction: () => choice('input', 'output', 'inout', 'ref'),
+
+    net_port_header: ($) => seq(optional($.port_direction), $.net_port_type),
+
+    variable_port_header: ($) => seq(optional($.port_direction), $.variable_port_type),
+
+    interface_port_header: ($) => 
+      choice(
+        seq($.interface_port_header, optional(seq('.', $.modport_identifier))),
+        seq('interface', optional(seq('.', $.modport_identifier)))
+      ),
+
     ansi_port_declaration: ($) =>
       choice(
         seq(
@@ -173,7 +187,7 @@ module.exports = grammar({
         ),
         seq(
           optional($.variable_port_header),
-          $.port_indentifier,
+          $.port_identifier,
           repeat($.variable_dimension),
           repeat(seq('=', $.constant_expression))
         ),
@@ -208,8 +222,6 @@ module.exports = grammar({
     attr_spec: ($) =>
       seq($.attr_name, optional(seq('=', $.constant_expression))),
     attr_name: () => $identifier,
-
-    module_identifier: ($) => $.identifier,
 
     identifier: ($) => choice($.simple_identifier, escaped_identifier),
 
@@ -288,12 +300,77 @@ module.exports = grammar({
         $.type_reference
       ),
 
+    net_type: () => choice('supply0', 'supply1', 'tri', 'triand', 'trior', 'trireg', 'tri0', 'tri1', 'uwire', 'wire', 'wand', 'wor'),
+    
+    net_port_type: ($) => 
+      choice(
+        seq(
+          optional($.net_type),
+          $.data_type_or_implicit
+        ),
+        $.net_type_identifier,
+        seq('interconnect', $.implicit_data_type)
+      ),
+
+    variable_port_type: ($) => $.var_data_type,
+
+    var_data_type: ($) => 
+      choice($.data_type, seq('var', $.data_type_or_implicit)),
+
+    signing: () => choice('signed', 'unsigned'),
+
     // A2.3 Declaration lists
     list_of_param_assignments: ($) =>
       seq($.param_assignment, repeat(seq(',', $.param_assignment))),
 
     list_of_type_assignments: ($) =>
       seq($.type_assignment, repeat(seq(',', $.type_assignment))),
+
+    // A.2.5 Declaration ranges
+    unpacked_dimension: ($) => 
+      choice(
+        seq('[', $.constant_range, ']'),
+        seq('[', $.constant_expression, ']')
+      ),
+
+    packed_dimension: ($) => 
+      choice(
+        seq('[', $.constant_range, ']'),
+        $.unsized_dimension
+      ),
+
+    variable_dimension: ($) => 
+      choice(
+        $.unsized_dimension,
+        $.unpacked_dimension,
+        $.associative_dimension,
+        $.queue_dimension
+      ),
+
+    // A.8.3 Expressions
+    constant_expression: ($) => 
+      choice(
+        $.constant_primary,
+        seq(
+          $.unary_operator,
+          repeat($.attribute_instance),
+          $.constant_primary
+        ),
+        seq(
+          $.constant_expression,
+          $.binary_operator,
+          repeat($.attribute_instance),
+          $.constant_expression
+        ),
+        seq(
+          $.constant_expression,
+          '?',
+          repeat($.attribute_instance), 
+          $.constant_expression,
+          ':',
+          $.constant_expression
+        )
+      ),
 
     // A.8.4 Primaries
     time_literal: ($) =>
@@ -304,6 +381,18 @@ module.exports = grammar({
 
     time_unit: () => choice('s', 'ms', 'us', 'ns', 'ps', 'fs'),
 
+    constant_select: ($) => 
+      seq(
+        optional(
+          seq( 
+            repeat( seq('.', $.member_identifier, $.constant_bit_select)),
+            '.',
+            $.member_identifier
+            )),
+        $.constant_bit_select,
+        optional(seq('[', $.constant_part_select_range, ']'))
+      ),
+
     // A.8.7 Numbers
     fixed_point_number: ($) => seq($.unsigned_number, '.', $.unsigned_number),
 
@@ -311,5 +400,19 @@ module.exports = grammar({
       seq($.decimal_digit, repeat(choice('_', $.decimal_digit))),
 
     decimal_digit: () => /[0-9]/,
+
+    // A.9.3 Identifiers
+    index_variable_identifier: ($) => $.identifier,
+    interface_identifier: ($) => $.identifier,
+    interface_instance_identifier: ($) => $.identifier,
+    inout_port_identifier: ($) => $.identifier,
+    input_port_identifier: ($) => $.identifier,
+    instance_identifier: ($) => $.identifier,
+    library_identifier: ($) => $.identifier,
+    member_identifier: ($) => $.identifier,
+    method_identifier: ($) => $.identifier,
+    modport_identifier: ($) => $.identifier,
+    module_identifier: ($) => $.identifier,
+    port_identifier: ($) => $.identifier,
   },
 })
